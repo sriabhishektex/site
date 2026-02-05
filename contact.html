@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Sri Abhishek Tex</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       Navigation — identical to index.html for consistency
+       ============================================================ -->
+  <nav class="site-nav" aria-label="Primary">
+    <div class="container">
+      <a href="index.html" class="site-nav__brand">
+        <img src="logo.png" alt="Sri Abhishek Tex" class="site-nav__logo">
+        <span class="site-nav__name">Sri Abhishek Tex</span>
+      </a>
+      <ul class="site-nav__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       Contact Section — form with name, email, message fields
+       ============================================================ -->
+  <section class="section section--light">
+    <div class="container">
+      <p class="section__eyebrow">Get in Touch</p>
+      <h1 class="section__title">We'd love to hear from you.</h1>
+      <p class="section__subtitle">
+        Need a quote, want to place a bulk order, or have a question about
+        our oils? Fill out the form below and our team will respond within
+        one business day.
+      </p>
+
+      <!-- Contact form — client-side only; no backend wired up -->
+      <form id="contactForm" class="contact-form" novalidate>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Jane Doe"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="jane@example.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Tell us about your requirements…"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Send Message</button>
+      </form>
+
+      <!-- ========================================================
+           Confirmation — hidden by default, revealed after submit
+           ======================================================== -->
+      <div id="confirmation" class="confirmation" role="status">
+        <div class="confirmation__icon" aria-hidden="true">&#10003;</div>
+        <h2 class="confirmation__heading">Message sent.</h2>
+        <p class="confirmation__text">
+          Thanks for reaching out! We'll get back to you shortly.
+        </p>
+        <p style="margin-top:1.5rem;">
+          <a href="index.html">Back to Home</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Footer
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 Sri Abhishek Tex. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       Inline script — handles form submission + shows confirmation.
+       In production you would replace this with a real endpoint.
+       ============================================================ -->
+  <script>
+    (() => {
+      const form = document.getElementById('contactForm');
+      const confirmation = document.getElementById('confirmation');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // Basic HTML5 validation check
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        // Hide the form, show confirmation message
+        form.style.display = 'none';
+        confirmation.classList.add('is-visible');
+      });
+    })();
+  </script>
+
+</body>
+</html>
