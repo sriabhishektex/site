@@ -37,8 +37,13 @@
         one business day.
       </p>
 
-      <!-- Contact form — client-side only; no backend wired up -->
-      <form id="contactForm" class="contact-form" novalidate>
+      <!-- Contact form — submits to Formspree endpoint via AJAX -->
+      <form
+        id="contactForm"
+        action="https://formspree.io/f/mwvnewbl"
+        method="POST"
+        class="contact-form"
+      >
         <div class="form-group">
           <label for="name">Name</label>
           <input
@@ -108,26 +113,51 @@
   </footer>
 
   <!-- ============================================================
-       Inline script — handles form submission + shows confirmation.
-       In production you would replace this with a real endpoint.
+       Inline script — intercepts form submit, posts to Formspree
+       via fetch, then shows the in-page confirmation message.
+       Falls back to native form POST if JS is disabled.
        ============================================================ -->
   <script>
     (() => {
       const form = document.getElementById('contactForm');
       const confirmation = document.getElementById('confirmation');
+      const submitBtn = form.querySelector('.btn-submit');
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        // Basic HTML5 validation check
+        // HTML5 validation check
         if (!form.checkValidity()) {
           form.reportValidity();
           return;
         }
 
-        // Hide the form, show confirmation message
-        form.style.display = 'none';
-        confirmation.classList.add('is-visible');
+        // Disable button to prevent double-submit
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending\u2026';
+
+        // POST form data to Formspree via fetch (AJAX)
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        })
+        .then((response) => {
+          if (response.ok) {
+            // Success — hide form, show confirmation
+            form.style.display = 'none';
+            confirmation.classList.add('is-visible');
+          } else {
+            // Formspree returned an error
+            throw new Error('Form submission failed');
+          }
+        })
+        .catch(() => {
+          // Re-enable button so user can retry
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send Message';
+          alert('Something went wrong. Please try again or email us directly.');
+        });
       });
     })();
   </script>
